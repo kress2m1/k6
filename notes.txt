@@ -1,0 +1,56 @@
+Why do we run Perfomance Tests for apps?
+
+Perfomance testing is the umbrella-term for the different types of tests we run against the AUT.
+This is generally meant to be understood as the significant number of users trying to use the application 
+at the same time.
+
+Load Test: 
+This is checking how well the system performs against multiple users accessing it concurrently.
+Where there is emperical data available, the number of users for this test at its peak period should be used here.
+Where no empirical data is available, a best guest approach should be adopted.
+It is not designed to break the system, rather, it's to detect degredation in the system.
+A load test can be run for as much as 30mins, gradually increasing the number of users.
+This is run in Pre-Prod before a deployment to Production, or where there has been an infrastructure change, no matter how small.
+
+Three stages apply here
+1. Ramp up stage: Here, the initial number of users are gradually increased to the desired value.
+2. Duration: The AUT is left to run for 30mins or more
+3. Ramp down: The number of users are gradually decreased until the end of the test.
+
+When ramping up/down, it's important to do this in a way that allows the AUT to scale up/down resources to accommodate the changes.
+The aim is to simulate real-world examples of a gradual increase of users on the application.
+
+Stress Test: 
+This is pushing the AUT to its breaking point. This is testing it at above average conditions. 
+This test should be run after the successful completion of a load test. 
+
+Spike Test:
+A typical application might suddenly experience events, that could lead to a sudden spike in the number of users, referred to as a spike.
+The AUT needs to be investigated to confirm it can handle this scenario.
+Here, the load is suddenly increased and the AUT is checked to see how it operates. The ramp up time is non-existent.
+
+Breakpoint Test: 
+This test is to determine the point at which the AUT starts breaking, by gradually increasing the load from zero, to a very high value.
+During the test, the error rate needs to be monitored, as well as when the response times become unacceptable, as well as when the AUT 
+stops responding/crashes. The number of users at this point needs to be recorded.
+It's advisable to avoid doing this in an elastic environment, which can result in unlimited scaling and massive bills.
+It should also be run after the successful runs of both a load and stress test.
+
+Soak Test: 
+This is a variation of a load test. Here, the duration time is longer so possible issues can be revealed:
+1. Memory leaks - this can occur as more memory is allocated to handle the extended demand by the users 
+2. Disc space - as more data is being generated, more disc space is required to handle it, leading to a degredation in the service if not handled properly. i.e logs, cache
+3. Database - the data being created by the users will also have a demand on the available space in the database. 
+
+This test is run after the successful run of a load test.
+
+Scalability: What is this?
+Vertical Scaling: Here, the capacity, processing power, etc, of a single server, might be increased to support usage,
+but this has a physical limit beyond what can be realistically achieved.
+
+Horizontal Scaling: Multiple servers are spun up, to cater to the demand for services
+
+Smoke Test: These are basic tests run to confirm that it is ok to continue any further testing on the build.
+It is NOT classed as a part of Perfomance Tests.
+The VUs should be a max of 3, though 1 is ideal, and runtime should be from 30s to a few minutes.
+The results should be compared against a prior baseline, to validate that the connection times for the data packets are still standard.
